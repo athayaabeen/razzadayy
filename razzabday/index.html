@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Selamat Ulang Tahun</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Great+Vibes&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#1d0713;--bg2:#2a0b1c;--rose:#f4a7c0;--rose2:#e0709a;--cream:#fff8ee;--gold:#f2c46d;--ink:#3a1a28;--txt:#f6e4ec;--mut:#c79ab0;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:radial-gradient(circle at 50% 0,var(--bg2),var(--bg) 60%);color:var(--txt);font-family:'DM Sans',system-ui,sans-serif;line-height:1.6;min-height:100vh;overflow-x:hidden}
+h1,h2,h3{font-family:'Playfair Display',Georgia,serif;margin:0}
+section{max-width:720px;margin:0 auto;padding:88px 22px;text-align:center}
+.script{font-family:'Great Vibes',cursive;color:var(--rose);font-weight:400}
+.sub{color:var(--mut);margin:8px 0 32px;font-size:.95rem}
+button{font:inherit;cursor:pointer;border:0}
+button:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+#petals{position:fixed;inset:0;pointer-events:none;z-index:0}
+main,#lock{position:relative;z-index:1}
+
+/* lock */
+#lock{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--bg);transition:opacity .8s,visibility .8s;padding:20px}
+#lock.off{opacity:0;visibility:hidden}
+#lock h2{font-size:1.5rem;margin-bottom:4px}
+.dots{display:flex;gap:12px;margin:22px 0}
+.dots i{width:12px;height:12px;border-radius:50%;border:1.5px solid var(--rose);transition:.2s}
+.dots i.on{background:var(--rose)}
+.pad{display:grid;grid-template-columns:repeat(3,64px);gap:14px}
+.pad button{height:64px;border-radius:50%;background:rgba(255,255,255,.06);color:var(--txt);font-size:1.3rem}
+.pad button:active{background:rgba(244,167,192,.3)}
+.pad .ok{background:var(--rose2);color:#fff}
+.shake{animation:sh .4s}
+@keyframes sh{20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+#err{height:20px;color:var(--rose2);font-size:.85rem;margin-top:14px}
+
+/* hero */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center}
+.hero h1{font-size:clamp(2.6rem,9vw,4.4rem);line-height:1.05}
+.hero .script{font-size:clamp(3rem,11vw,5.2rem);display:block;margin:-4px 0}
+.date{color:var(--mut);font-size:.85rem;letter-spacing:.08em;margin:18px 0}
+.pill{background:rgba(244,167,192,.14);color:var(--rose);border-radius:99px;padding:9px 20px;font-size:.9rem}
+.cake{width:150px;margin:34px auto 10px}
+.flame{transform-origin:50% 100%;animation:fl 1.2s ease-in-out infinite alternate}
+@keyframes fl{to{transform:scale(1.15,.9)}}
+.flame{transition:opacity .5s,transform .5s}
+.cake.off .flame{animation:none;opacity:0;transform:scale(.2)}
+.polas{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:26px;margin-top:10px}
+.pola{margin:0;background:var(--cream);padding:10px 10px 6px;border-radius:4px;color:var(--ink);transform:rotate(var(--r));box-shadow:0 10px 28px rgba(0,0,0,.4)}
+.pola .ph{aspect-ratio:4/5;background:#ead8df;display:grid;place-items:center;font-size:2rem;overflow:hidden}
+.pola img{width:100%;height:100%;object-fit:cover;display:block}
+.pola figcaption{font-size:1.6rem;padding:6px 0 2px;color:var(--rose2)}
+.msg{background:rgba(255,255,255,.05);border-radius:14px;padding:12px 22px;margin-top:14px;max-width:420px}
+
+/* timeline */
+.tl{text-align:left;position:relative;margin-top:20px;padding-left:28px;border-left:2px solid rgba(244,167,192,.3)}
+.tl article{position:relative;background:rgba(255,255,255,.05);border-radius:14px;padding:16px 20px;margin-bottom:20px}
+.tl article::before{content:"";position:absolute;left:-37px;top:22px;width:14px;height:14px;border-radius:50%;background:var(--rose2);box-shadow:0 0 0 4px var(--bg)}
+.tl h3{font-size:1.1rem;margin-bottom:4px}
+.tl small{color:var(--gold)}
+.tl p{margin:6px 0 0;color:var(--txt);font-size:.95rem}
+
+/* bouquet */
+.bq{position:relative;width:260px;height:300px;margin:0 auto}
+.bq svg{position:absolute;inset:0}
+.fl{position:absolute;width:48px;height:48px;border-radius:50%;background:var(--bg2);font-size:1.6rem;display:grid;place-items:center;box-shadow:0 0 0 2px rgba(244,167,192,.4);transition:.4s;opacity:.55}
+.fl.open{opacity:1;transform:scale(1.25);box-shadow:0 0 22px 4px rgba(242,196,109,.6)}
+.quote{min-height:70px;max-width:420px;margin:18px auto 0;font-family:'Playfair Display',serif;font-style:italic;color:var(--cream)}
+
+/* memory boxes */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+.box{background:rgba(255,255,255,.05);border:1px dashed rgba(244,167,192,.4);border-radius:14px;min-height:200px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--mut);padding:20px;transition:.4s}
+.box .em{font-size:2rem}
+.box.open{background:var(--cream);border:0;color:var(--ink)}
+.box.open{padding:12px 12px 18px}
+.box.open img{width:100%;max-height:280px;object-fit:cover;border-radius:8px;margin-bottom:6px;display:block}
+.box.open h3{font-size:1.05rem}
+.box.open p{margin:4px 0 0;font-size:.88rem}
+
+/* playlist */
+.player{background:rgba(255,255,255,.06);border-radius:20px;padding:26px;max-width:380px;margin:0 auto}
+.disc{width:84px;height:84px;border-radius:50%;margin:0 auto 14px;background:radial-gradient(circle,var(--bg) 14%,var(--rose2) 15% 38%,#3a1124 39%);animation:spin 6s linear infinite;animation-play-state:paused}
+.playing .disc{animation-play-state:running}
+@keyframes spin{to{transform:rotate(360deg)}}
+.bar{height:4px;background:rgba(255,255,255,.15);border-radius:4px;margin:14px 0 6px}
+.bar i{display:block;height:100%;width:0;background:var(--rose);border-radius:4px}
+.ctl{display:flex;justify-content:center;gap:18px;align-items:center;margin-top:8px}
+.ctl button{background:none;color:var(--txt);font-size:1.2rem}
+.ctl .pp{width:48px;height:48px;border-radius:50%;background:var(--rose2);color:#fff}
+ul.tracks{list-style:none;margin:22px 0 0;padding:0;text-align:left}
+ul.tracks li{padding:10px 12px;border-radius:10px;cursor:pointer;display:flex;justify-content:space-between}
+ul.tracks li.cur{background:rgba(244,167,192,.15)}
+ul.tracks span{color:var(--mut);font-size:.85rem}
+
+/* jar */
+.jar{width:96px;height:120px;margin:0 auto;border:2px solid rgba(255,255,255,.3);border-top:0;border-radius:0 0 26px 26px;position:relative;background:rgba(255,255,255,.04)}
+.jar::before{content:"";position:absolute;top:-14px;left:-6px;right:-6px;height:14px;background:var(--rose);border-radius:6px}
+.jar b{position:absolute;width:26px;height:16px;border-radius:3px}
+.note{background:var(--cream);color:var(--ink);border-radius:16px;padding:26px;max-width:420px;margin:26px auto 0;font-family:'Playfair Display',serif;font-style:italic;display:none}
+.note.show{display:block;animation:pop .5s}
+@keyframes pop{from{transform:scale(.9) rotate(-2deg);opacity:0}}
+.btn{background:var(--rose);color:var(--ink);border-radius:99px;padding:12px 26px;font-weight:500;margin-top:26px}
+footer{padding:50px 20px 70px;text-align:center;color:var(--mut)}
+.conf{position:fixed;top:-12px;z-index:60;pointer-events:none;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(105vh) rotate(720deg);opacity:.8}}
+.env{background:var(--rose);color:var(--ink);border-radius:16px;padding:26px 38px;font-size:2.6rem;display:flex;flex-direction:column;align-items:center;gap:6px;margin:0 auto;box-shadow:0 10px 28px rgba(0,0,0,.4);transition:transform .2s}
+.env:hover{transform:translateY(-3px)}
+.env span{font-size:.95rem;font-weight:500}
+.letter{display:none;background:var(--cream);color:var(--ink);text-align:left;max-width:520px;margin:0 auto;padding:36px 30px;border-radius:6px;font-family:'Playfair Display',serif;line-height:1.85;box-shadow:0 14px 36px rgba(0,0,0,.45)}
+.letter.show{display:block;animation:pop .6s}
+.letter p{margin:0 0 14px}
+.letter .to,.letter .from{font-family:'Great Vibes',cursive;font-size:1.9rem;color:var(--rose2);line-height:1.3}
+.letter .from{text-align:right;margin-top:8px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<!-- ====== UBAH DI SINI ====== -->
+<script>
+const CFG={
+  nama:"Razza",
+  tanggal:"04 November",
+  pin:"55555",
+  salam:"Happy Birthday! Razza",
+  candid:[
+    {src:"foto/1.jpg",cap:"km sm leon gendutan leon wkwkwkkw"},
+    {src:"foto/2.jpg",cap:"yeyy mam"},
+    {src:"foto/3.jpg",cap:"mam (lagi)"},
+    {src:"foto/4.jpg",cap:"sigma sigma boy sigma"}
+  ],
+  bunga:[
+    {e:"🌹",q:"Some things are beautiful without even trying."},
+    {e:"🌻",q:"May you always find a reason to bloom."},
+    {e:"🌷",q:"I'm glad our paths crossed."},
+    {e:"🌸",q:"Never forget how much you are appreciated."}
+  ],
+  foto:[
+    {src:"foto/k1.jpg",t:"5 June 2025",d:"aku gatau kenapa aku suka banget foto ini, sama kamu jugaaa wkwkkw"},
+    {src:"foto/k2.jpg",t:"25 May 2025",d:"makasigh yaa udah nemenin aku di seglaaaa eventku, aku tau itu capek banget tapi kamu tetep mau nemenin aku, makasih yaaa"},
+  ],
+  // Format lagu: [judul, artis, "path file mp3"]  (taruh mp3 di folder "musik")
+  lagu:[["Anyhting","Adrianne Lenker","musik/lagu1.mp3"],["Hanya Untukmu","Sal Priadi","musik/lagu2.mp3"],["Firasat","Marcell","musik/lagu3.mp3"]],
+  surat:{
+    untuk:"Dear Razza,",
+    isi:[
+      " selamat ulang tahun yg ke 19, kakak makasih ya kamu udah keren bangettt selma 19 tahun ini semoga kamu selau dikelilingi hal hal baik, dimudahkan segala urusannya, karirnya dan semuanya",
+      "semoga tahun ini kamu juga bisa jadi lebih dewasa, lebih sabar, lebih gak buru buru dalam mengambil keputusan",
+      "aku mau minta maaf karna ngadoin kamu telat dan baruu bisa kasi kado yg sangat sederhana ini, maaf aku ngucapinnya telat yaa and last one, enjoy ur bday kakakk, i miss u.",
+      "tunggulah aku, di 'Jakarta'mu."
+    ],
+    dari:"From : sab"
+  },
+  alasan:[
+
+    "If today feels heavy, I hope tomorrow feels lighter.",
+    "No matter where life takes you, keep choosing happiness.",
+    "I hope you find joy in things you once overlooked.",
+    "May you always have something to look forward to.",
+    "I hope life gives you more reasons to smile than to worry.",
+    "You deserve a life that feels as good as it looks.",
+    "Don't be too hard on yourself. You're still learning.",
+    "I hope you never lose the little things that make you happy.",
+    "Even the smallest progress is worth celebrating.",
+    "May you always find peace in the middle of uncertainty.",
+    "You don't need to have it all figured out to be doing well.",
+    "I hope you meet beautiful moments in unexpected places.",
+    "Remember to slow down and appreciate how far you've come.",
+    "There is no deadline for becoming the person you want to be.",
+    "I hope your dreams always feel worth chasing.",
+    "May you find comfort in knowing that things will work out.",
+    "You make this world a little more interesting just by being in it.",
+    "Never underestimate the beauty of a fresh start.",
+    "I hope you always have the courage to choose yourself.",
+    "Some of the best moments happen when you least expect them.",
+    "You are allowed to grow at your own pace.",
+    "May your future be filled with things you once wished for.",
+    "I hope you find happiness in the ordinary days, too.",
+    "Whatever happens, I hope you remain gentle with yourself."
+  ]
+};
+</script>
+
+<canvas id="petals"></canvas>
+
+<div id="lock" role="dialog" aria-label="Masukkan kode">
+  <h2 id="lk-title"></h2>
+  <div class="sub" style="margin:0">masukan kode hp aku</div>
+  <div class="dots" id="dots"></div>
+  <div class="pad" id="pad"></div>
+  <div id="err" role="alert"></div>
+</div>
+
+<main>
+<section class="hero" id="top">
+  <span class="pill">sweet nineteen</span>
+  <h1 style="margin-top:22px">Happy<span class="script">Birthday</span><span id="h-name"></span></h1>
+  <div class="date" id="h-date"></div>
+  <button class="pill" id="celebrate" style="background:rgba(244,167,192,.2)">Ketuk aku untuk merayakan 🎉</button>
+  <svg class="cake" id="cake" viewBox="0 0 150 140" aria-hidden="true">
+    <ellipse cx="75" cy="128" rx="68" ry="9" fill="#000" opacity=".25"/>
+    <rect x="12" y="84" width="126" height="42" rx="10" fill="#f9c6d6"/>
+    <rect x="28" y="52" width="94" height="36" rx="9" fill="#fde4ec"/>
+    <path d="M12 94q10 12 20 0t20 0 20 0 20 0 20 0 20 0 14 0" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round"/>
+    <rect x="48" y="30" width="6" height="24" fill="#f2c46d"/><rect x="72" y="30" width="6" height="24" fill="#f2c46d"/><rect x="96" y="30" width="6" height="24" fill="#f2c46d"/>
+    <g class="flame" fill="#ffb347"><ellipse cx="51" cy="22" rx="4.5" ry="8"/><ellipse cx="75" cy="22" rx="4.5" ry="8"/><ellipse cx="99" cy="22" rx="4.5" ry="8"/></g>
+  </svg>
+  <div class="msg" id="h-msg"></div>
+</section>
+
+<section id="story">
+  <h2 style="font-size:2rem">Candid Moments</h2>
+  <p class="sub">GAPAPA SIH, EMANG SUKA MOTOIN KAMU AJA HEHHEHE</p>
+  <div class="polas" id="polas"></div>
+</section>
+
+<section id="bouquet">
+  <h2 style="font-size:2rem">Digital Bouquet</h2>
+  <p class="sub">Some flowers, with a little thought behind them.</p>
+  <div class="bq" id="bq">
+    <svg viewBox="0 0 260 300" aria-hidden="true">
+      <g stroke="#7bb88a" stroke-width="3" fill="none" stroke-linecap="round"><path d="M130 250Q60 190 46 74"/><path d="M130 250Q110 170 98 40"/><path d="M130 250Q150 170 162 40"/><path d="M130 250Q200 190 214 74"/></g>
+      <path d="M92 240h76l-10 52h-56z" fill="#f4a7c0"/>
+    </svg>
+  </div>
+  <div class="quote" id="quote">Ketuk bunganya ✨</div>
+</section>
+
+<section id="photos">
+  <h2 style="font-size:2rem">A year ago today</h2>
+  <p class="sub">Tap the boxes to open them</p>
+  <div class="grid" id="grid"></div>
+</section>
+
+<section id="music">
+  <h2 style="font-size:2rem">The Playlist</h2>
+  <p class="sub">Play the songs</p>
+  <div class="player" id="player">
+    <div class="disc"></div>
+    <h3 id="p-title"></h3><div class="sub" id="p-art" style="margin:0"></div>
+    <div class="bar"><i id="p-bar"></i></div>
+    <div id="p-err" role="alert" style="color:var(--rose2);font-size:.8rem;min-height:20px"></div>
+    <div class="ctl"><button id="prev" aria-label="Sebelumnya">⏮</button><button class="pp" id="pp" aria-label="Putar">▶</button><button id="next" aria-label="Berikutnya">⏭</button></div>
+    <ul class="tracks" id="tracks"></ul>
+  </div>
+</section>
+
+<section id="jar">
+  <h2 style="font-size:2rem">Reasons I’m Grateful To Know You</h2>
+  <p class="sub">Shake the jar, pick a note 🫙</p>
+  <div class="jar" id="jarEl"></div>
+  <button class="btn" id="draw">Shake the jar</button>
+  <div class="note" id="note"></div>
+</section>
+
+<section id="letter">
+  <h2 style="font-size:2rem">Surat Untukmu</h2>
+  <p class="sub">Ketuk amplopnya untuk membuka</p>
+  <button class="env" id="env" aria-label="Buka surat">💌<span>Buka suratnya</span></button>
+  <article class="letter" id="letterBody"></article>
+</section>
+</main>
+
+<footer><span class="script" style="font-size:2rem">With all of my heart</span><br>Happy birthday, <span id="f-name"></span> 💗</footer>
+
+<script>
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+$('#lk-title').textContent='Dear '+CFG.nama+'';
+$('#h-name').textContent=CFG.nama;$('#f-name').textContent=CFG.nama;
+$('#h-date').textContent=CFG.tanggal+' · hari paling spesial';
+$('#h-msg').textContent=CFG.salam+' 💗';
+
+/* lock */
+let code='';const L=CFG.pin.length;
+$('#dots').innerHTML=Array(L).fill('<i></i>').join('');
+const keys=['1','2','3','4','5','6','7','8','9','⌫','0','✓'];
+$('#pad').innerHTML=keys.map(k=>`<button data-k="${k}"${k==='✓'?' class="ok"':''}>${k}</button>`).join('');
+function paint(){document.querySelectorAll('#dots i').forEach((d,i)=>d.classList.toggle('on',i<code.length))}
+function check(){
+  if(code===CFG.pin){$('#lock').classList.add('off');confetti(60);setPlay(true);return}
+  $('#err').textContent='Kodenya belum tepat, coba lagi.';
+  $('#dots').classList.remove('shake');void $('#dots').offsetWidth;$('#dots').classList.add('shake');
+  code='';paint();
+}
+$('#pad').onclick=e=>{const k=e.target.dataset.k;if(!k)return;$('#err').textContent='';
+  if(k==='⌫')code=code.slice(0,-1);else if(k==='✓')check();else if(code.length<L){code+=k;if(code.length===L)setTimeout(check,150)}
+  paint()};
+
+/* confetti */
+function confetti(n=90){
+  const cols=['#f4a7c0','#f2c46d','#fff8ee','#e0709a','#9fd3ff'];
+  for(let i=0;i<n;i++){const d=document.createElement('div');d.className='conf';
+    const s=6+Math.random()*7;
+    d.style.cssText=`left:${Math.random()*100}vw;width:${s}px;height:${s*1.6}px;background:${cols[i%5]};animation-duration:${2.5+Math.random()*2.5}s;animation-delay:${Math.random()*.6}s;border-radius:2px`;
+    document.body.appendChild(d);setTimeout(()=>d.remove(),6000)}
+}
+$('#celebrate').onclick=()=>{
+  const c=$('#cake'),off=!c.classList.contains('off');
+  c.classList.toggle('off',off);
+  $('#celebrate').textContent=off?'Nyalakan lilinnya lagi 🕯️':'Ketuk aku untuk merayakan 🎉';
+  if(off)confetti(120);
+};
+
+/* timeline */
+$('#polas').innerHTML=CFG.candid.map((c,i)=>`<figure class="pola" style="--r:${[-2.5,2,-1.5,3][i%4]}deg"><div class="ph">${c.src?`<img src="${esc(c.src)}" alt="" loading="lazy" onerror="this.replaceWith('📷')">`:'📷'}</div><figcaption class="script">${esc(c.cap)}</figcaption></figure>`).join('');
+
+/* bouquet */
+const pos=[[22,50],[74,16],[138,16],[190,50]];
+CFG.bunga.forEach((b,i)=>{const f=document.createElement('button');f.className='fl';f.textContent=b.e;
+  f.style.left=pos[i%4][0]+'px';f.style.top=pos[i%4][1]+'px';f.setAttribute('aria-label','Bunga '+(i+1));
+  f.onclick=()=>{document.querySelectorAll('.fl').forEach(x=>x.classList.remove('open'));f.classList.add('open');
+    $('#quote').textContent='“'+b.q+'”';confetti(14)};
+  $('#bq').appendChild(f)});
+
+/* memory boxes */
+$('#grid').innerHTML=CFG.foto.map(f=>`<button class="box"><span class="em">🎞️</span><span>Kotak untuk mengungkap</span></button>`).join('');
+document.querySelectorAll('.box').forEach((b,i)=>b.onclick=()=>{
+  if(b.classList.contains('open'))return;b.classList.add('open');
+  const f=CFG.foto[i];
+  b.innerHTML=(f.src?`<img src="${esc(f.src)}" alt="" onerror="this.replaceWith('🌷')">`:'<span class="em">🌷</span>')+`<h3>${esc(f.t)}</h3><p>${esc(f.d)}</p>`;confetti(18)});
+
+/* playlist (audio sungguhan) */
+let cur=0,playing=false;
+const au=new Audio();au.preload='auto';
+$('#tracks').innerHTML=CFG.lagu.map((l,i)=>`<li data-i="${i}"><b style="font-weight:500">${esc(l[0])}</b><span>${esc(l[1])}</span></li>`).join('');
+function show(){const l=CFG.lagu[cur];$('#p-title').textContent=l[0];$('#p-art').textContent=l[1];
+  document.querySelectorAll('#tracks li').forEach((li,i)=>li.classList.toggle('cur',i===cur));$('#p-bar').style.width='0'}
+function ui(p){playing=p;$('#player').classList.toggle('playing',p);$('#pp').textContent=p?'⏸':'▶'}
+function setPlay(p){ui(p);if(p){au.play().catch(()=>ui(false))}else au.pause()}
+function pick(i,play){$('#p-err').textContent='';cur=(i+CFG.lagu.length)%CFG.lagu.length;au.src=CFG.lagu[cur][2];show();setPlay(play)}
+au.addEventListener('timeupdate',()=>{if(au.duration)$('#p-bar').style.width=(au.currentTime/au.duration*100)+'%'});
+au.addEventListener('error',()=>{ui(false);$('#p-err').textContent='File lagu tidak ditemukan: '+CFG.lagu[cur][2]});
+au.addEventListener('ended',()=>pick(cur+1,true));
+$('#pp').onclick=()=>setPlay(!playing);
+$('#next').onclick=()=>pick(cur+1,playing);
+$('#prev').onclick=()=>pick(cur-1,playing);
+$('#tracks').onclick=e=>{const li=e.target.closest('li');if(li)pick(+li.dataset.i,true)};
+au.src=CFG.lagu[0][2];show();
+
+/* surat */
+$('#letterBody').innerHTML=`<div class="to">${esc(CFG.surat.untuk)}</div>`+CFG.surat.isi.map(t=>`<p>${esc(t)}</p>`).join('')+`<div class="from">${esc(CFG.surat.dari)}</div>`;
+$('#env').onclick=()=>{$('#env').style.display='none';$('#letterBody').classList.add('show');confetti(40);$('#letterBody').scrollIntoView({behavior:'smooth',block:'center'})};
+
+/* jar */
+const jc=['#f4a7c0','#f2c46d','#fff8ee','#9fd3ff'];
+$('#jarEl').innerHTML=Array.from({length:9},(_,i)=>`<b style="background:${jc[i%4]};left:${8+(i%3)*24}px;bottom:${6+Math.floor(i/3)*16}px;transform:rotate(${(i*37)%50-25}deg)"></b>`).join('');
+let last=-1;
+$('#draw').onclick=()=>{let i;do{i=Math.floor(Math.random()*CFG.alasan.length)}while(i===last&&CFG.alasan.length>1);last=i;
+  $('#jarEl').classList.remove('shake');void $('#jarEl').offsetWidth;$('#jarEl').classList.add('shake');
+  const n=$('#note');n.classList.remove('show');void n.offsetWidth;n.textContent='“'+CFG.alasan[i]+'”';n.classList.add('show')};
+
+/* petals */
+const cv=$('#petals'),cx=cv.getContext('2d');let W,H,ps=[];
+function rs(){W=cv.width=innerWidth;H=cv.height=innerHeight}rs();addEventListener('resize',rs);
+const pc=['#e0709a','#c2456f','#f2c46d','#7a8cff'];
+for(let i=0;i<26;i++)ps.push({x:Math.random()*W,y:Math.random()*H,r:4+Math.random()*7,v:.25+Math.random()*.5,s:Math.random()*6,c:pc[i%4]});
+(function loop(){cx.clearRect(0,0,W,H);
+  for(const p of ps){p.y+=p.v;p.s+=.01;p.x+=Math.sin(p.s)*.5;if(p.y>H+10){p.y=-10;p.x=Math.random()*W}
+    cx.globalAlpha=.55;cx.fillStyle=p.c;cx.beginPath();cx.ellipse(p.x,p.y,p.r,p.r*.65,p.s,0,7);cx.fill()}
+  requestAnimationFrame(loop)})();
+</script>
+</body>
+</html>
